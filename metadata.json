@@ -1,0 +1,6 @@
+{
+  "name": "E-Musyawarah Desa",
+  "description": "Sistem musyawarah desa digital untuk mengelola agenda, notulen, absensi kehadiran, keputusan, dan tanda tangan elektronik warga.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
