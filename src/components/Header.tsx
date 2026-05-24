@@ -24,63 +24,68 @@ export default function Header({
   setDarkMode
 }: HeaderProps) {
   return (
-    <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-[0_1px_3px_rgba(60,64,67,0.08)]" id="main-app-header">
-      <div className="w-full px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-blue-50 text-[#0b57d0] rounded-xl border border-blue-100">
-            <Landmark size={22} className="stroke-[2]" />
+    <header className="border-b border-slate-200/80 bg-white sticky top-0 z-30 shadow-xs dark:bg-zinc-900 dark:border-zinc-800" id="main-app-header">
+      <div className="w-full px-6 py-3.5 flex items-center justify-between">
+        <div className="flex items-center gap-3.5">
+          <div className="p-2.5 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 rounded-xl border border-indigo-100/60 dark:border-indigo-900/50">
+            <Landmark size={20} className="stroke-[1.5]" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-base font-bold tracking-tight text-slate-800 font-display uppercase">
+              <h1 className="text-sm font-semibold tracking-tight text-slate-900 dark:text-zinc-100 font-sans uppercase">
                 E-Musyawarah
               </h1>
-              <span className="text-[9px] bg-blue-50 text-[#0b57d0] border border-blue-100 px-2 py-0.5 rounded-full font-mono font-bold tracking-wide uppercase">{villageName}</span>
+              <span className="text-[9.5px] bg-slate-100 dark:bg-zinc-800 text-slate-650 dark:text-zinc-400 px-2 py-0.5 rounded font-sans font-medium tracking-wide">
+                {villageName}
+              </span>
             </div>
-            <p className="text-[10px] text-slate-500 font-sans tracking-wide">Pencatatan Rapat Desa Praktis dengan Dukungan Tanda Tangan Digital Resmi</p>
+            <p className="text-[10.5px] text-slate-500 dark:text-zinc-400 font-sans mt-0.5">Sistem Tata Kelola Administrasi & Presensi Digital Sidang Desa</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={() => setDarkMode(!darkMode)}
-            className="p-2 text-slate-500 hover:text-[#0b57d0] hover:bg-slate-100 border border-slate-300 hover:border-[#0b57d0] transition duration-150 rounded-full focus:outline-none cursor-pointer"
+            className="p-2 text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-zinc-100 hover:bg-slate-50 dark:hover:bg-zinc-800 transition rounded-lg focus:outline-none cursor-pointer"
             title={darkMode ? "Aktifkan Mode Terang" : "Aktifkan Mode Gelap"}
             id="btn-header-dark-toggle"
           >
-            {darkMode ? <Sun size={17} className="text-amber-500 animate-none" /> : <Moon size={17} />}
+            {darkMode ? <Sun size={16} className="text-amber-500" /> : <Moon size={16} />}
           </button>
 
           <button
             onClick={() => setShowSettings(true)}
-            className="p-2 text-slate-500 hover:text-[#0b57d0] hover:bg-slate-100 border border-slate-300 hover:border-[#0b57d0] transition duration-150 rounded-full focus:outline-none cursor-pointer"
-            title="Pengaturan Daerah"
+            className="p-2 text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-zinc-100 hover:bg-slate-50 dark:hover:bg-zinc-800 transition rounded-lg focus:outline-none cursor-pointer"
+            title="Pengaturan Profil Daerah"
             id="btn-header-settings"
           >
-            <Settings size={17} />
+            <Settings size={16} />
           </button>
+
+          <div className="w-[1px] h-4 bg-slate-200 dark:bg-zinc-800 mx-1.5" />
           
           <button
             onClick={() => setShowCreateSession(true)}
-            className="flex items-center gap-1.5 bg-[#0b57d0] hover:bg-[#0049b8] text-white px-5 py-2.5 rounded-full text-xs font-bold font-display shadow-[0_1px_2px_rgba(60,64,67,0.3),_0_1px_3px_1px_rgba(60,64,67,0.15)] hover:shadow-[0_2px_6px_rgba(60,64,67,0.15),_0_4px_10px_4px_rgba(60,64,67,0.25)] transition duration-150 focus:outline-none cursor-pointer"
+            className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-750 text-white px-4 py-2 rounded-lg text-xs font-semibold tracking-tight shadow-sm hover:shadow transition focus:outline-none cursor-pointer"
             id="btn-header-open-session"
           >
-            <Plus size={15} className="stroke-[2.5] text-white" />
-            <span>Buat Rapat Baru</span>
+            <Plus size={14} className="stroke-[2.5]" />
+            <span>Rapat Baru</span>
           </button>
+          
           <button
             onClick={() => {
               if (activeSession) {
                 setShowReport(true);
               } else {
-                triggerNotification('Silakan buat atau pilih rapat terlebih dahulu.', 'error');
+                triggerNotification('Pilih atau daftarkan sidang desa terlebih dahulu.', 'error');
               }
             }}
-            className="flex items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-300 hover:border-[#0b57d0] text-[#0b57d0] px-5 py-2.5 rounded-full text-xs font-bold font-display shadow-sm transition duration-150 focus:outline-none cursor-pointer"
+            className="flex items-center gap-1.5 bg-white hover:bg-slate-50 dark:bg-zinc-800 dark:hover:bg-zinc-750 border border-slate-200 dark:border-zinc-700 text-slate-700 dark:text-zinc-200 px-4 py-2 rounded-lg text-xs font-semibold tracking-tight shadow-sm transition focus:outline-none cursor-pointer"
             id="btn-header-view-report"
           >
-            <FileText size={15} />
+            <FileText size={14} />
             <span>Berita Acara</span>
           </button>
         </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users, PenTool, Trash2 } from 'lucide-react';
+import { Users, PenTool, Trash2, Download } from 'lucide-react';
 import SignatureCanvas from './SignatureCanvas';
 import { AttendanceRecord } from '../types';
 
@@ -18,6 +18,7 @@ interface AttendancePanelProps {
   handleAddAttendance: (e: React.FormEvent) => void;
   handleDeleteAttendance: (id: string) => void;
   sigKey: number;
+  handleExportAttendanceCSV: () => void;
 }
 
 export default function AttendancePanel({
@@ -34,7 +35,8 @@ export default function AttendancePanel({
   setNewAttendeeSignature,
   handleAddAttendance,
   handleDeleteAttendance,
-  sigKey
+  sigKey,
+  handleExportAttendanceCSV
 }: AttendancePanelProps) {
   return (
     <div className="space-y-6" id="panel-attendance-workspace">
@@ -47,7 +49,17 @@ export default function AttendancePanel({
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
-          <span className="text-[10px] font-sans bg-green-50 text-green-800 border border-green-200 px-3 py-1 rounded-full font-bold uppercase tracking-wide">
+          <button
+            type="button"
+            onClick={handleExportAttendanceCSV}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-sans bg-white hover:bg-slate-50 text-[#0b57d0] border border-slate-200 hover:border-[#0b57d0] dark:bg-slate-800 dark:border-slate-700 dark:text-blue-400 dark:hover:bg-slate-750 rounded-full font-bold transition cursor-pointer focus:outline-none"
+            title="Ekspor daftar hadir ke Excel/CSV"
+            id="btn-attendance-export-csv"
+          >
+            <Download size={12} />
+            <span>Ekspor CSV</span>
+          </button>
+          <span className="text-[10px] font-sans bg-green-50 text-green-800 border border-green-200 px-3 py-1.5 rounded-full font-bold uppercase tracking-wide">
             {activeAttendance.length} HADIR
           </span>
         </div>
@@ -58,19 +70,19 @@ export default function AttendancePanel({
         
         {/* Left Side: Form (Span 5) */}
         <div className="lg:col-span-5 space-y-4" id="attendance-block-form-container">
-          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800 pb-1 font-display">
+          <h4 className="text-xs font-semibold text-slate-800 dark:text-zinc-200 pb-1">
             Formulir Kehadiran Digital
           </h4>
           
-          <form onSubmit={handleAddAttendance} className="space-y-4" id="form-attendance-pad">
+          <form onSubmit={handleAddAttendance} className="space-y-4.5" id="form-attendance-pad">
             <div>
-              <label className="block text-[10px] text-slate-500 font-sans uppercase tracking-wider mb-1 font-bold">Nama Lengkap & Gelar</label>
+              <label className="block text-[10px] text-slate-500 dark:text-zinc-450 uppercase tracking-wider mb-1 font-bold">Nama Lengkap & Gelar</label>
               <input
                 type="text"
                 value={newAttendeeName}
                 onChange={(e) => setNewAttendeeName(e.target.value)}
                 placeholder="Contoh: Sudjatmiko, S.E."
-                className="w-full bg-white text-slate-800 border border-slate-300 rounded-lg px-3 py-2 text-xs focus:border-[#0b57d0] focus:ring-1 focus:ring-[#0b57d0] focus:outline-none placeholder-slate-400 font-sans"
+                className="w-full bg-white dark:bg-zinc-800 text-slate-800 dark:text-zinc-100 border border-slate-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-xs focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none placeholder-slate-400 font-sans"
                 required
                 id="input-attendee-name"
               />
@@ -78,37 +90,37 @@ export default function AttendancePanel({
 
             <div className="grid grid-cols-2 gap-3.5">
               <div>
-                <label className="block text-[10px] text-slate-500 font-sans uppercase tracking-wider mb-1 font-bold">16-Digit NIK</label>
+                <label className="block text-[10px] text-slate-500 dark:text-zinc-450 uppercase tracking-wider mb-1 font-bold">16-Digit NIK</label>
                 <input
                   type="text"
                   maxLength={16}
                   value={newAttendeeNik}
                   onChange={(e) => setNewAttendeeNik(e.target.value.replace(/\D/g, ''))}
                   placeholder="NIK Warga"
-                  className="w-full bg-white text-slate-850 border border-slate-300 rounded-lg px-3 py-2 text-xs focus:border-[#0b57d0] focus:ring-1 focus:ring-[#0b57d0] focus:outline-none placeholder-slate-400 font-sans"
+                  className="w-full bg-white dark:bg-zinc-800 text-slate-850 dark:text-zinc-100 border border-slate-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-xs focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none placeholder-slate-400 font-sans"
                   required
                   id="input-attendee-nik"
                 />
                 {newAttendeeNik.length > 0 && (
                   <div className="mt-1 font-sans text-[9.5px]" id="nik-validator-feedback">
                     {newAttendeeNik.length === 16 ? (
-                      <span className="text-emerald-650 font-bold flex items-center gap-0.5 select-none">
-                        <span className="text-emerald-600 font-extrabold text-[11px]">✓</span> Format NIK Valid (16 Digit)
+                      <span className="text-emerald-650 dark:text-emerald-400 font-semibold flex items-center gap-0.5 select-none">
+                        <span className="text-emerald-600 dark:text-emerald-400 font-extrabold text-[11px]">✓</span> Format NIK Valid (16 Digit)
                       </span>
                     ) : (
-                      <span className="text-amber-600 font-bold flex items-center gap-0.5 select-none">
-                        <span className="text-amber-500 text-[11px]">⚠</span> NIK belum lengkap ({newAttendeeNik.length}/16 digit)
+                      <span className="text-amber-600 dark:text-amber-400 font-semibold flex items-center gap-0.5 select-none">
+                        <span className="text-amber-500 dark:text-amber-450 text-[11px]">⚠</span> NIK belum lengkap ({newAttendeeNik.length}/16 digit)
                       </span>
                     )}
                   </div>
                 )}
               </div>
               <div>
-                <label className="block text-[10px] text-slate-500 font-sans uppercase tracking-wider mb-1 font-bold">Jabatan / Utusan</label>
+                <label className="block text-[10px] text-slate-500 dark:text-zinc-450 uppercase tracking-wider mb-1 font-bold">Jabatan / Utusan</label>
                 <select
                   value={newAttendeeRole}
                   onChange={(e) => setNewAttendeeRole(e.target.value)}
-                  className="w-full bg-white text-slate-800 border border-slate-300 rounded-lg px-2.5 py-2 text-xs focus:border-[#0b57d0] focus:ring-1 focus:ring-[#0b57d0] focus:outline-none cursor-pointer font-sans"
+                  className="w-full bg-white dark:bg-zinc-800 text-slate-800 dark:text-zinc-100 border border-slate-300 dark:border-zinc-700 rounded-lg px-2.5 py-2 text-xs focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none cursor-pointer font-sans"
                   id="select-attendee-role"
                 >
                   <option value="Warga Dusun I">Warga Dusun I</option>
@@ -124,21 +136,21 @@ export default function AttendancePanel({
             </div>
 
             <div>
-              <label className="block text-[10px] text-slate-500 font-sans uppercase tracking-wider mb-1 font-bold">Nomor WA / HP (Opsional)</label>
+              <label className="block text-[10px] text-slate-500 dark:text-zinc-450 uppercase tracking-wider mb-1 font-bold">Nomor WA / HP (Opsional)</label>
               <input
                 type="text"
                 value={newAttendeePhone}
                 onChange={(e) => setNewAttendeePhone(e.target.value)}
                 placeholder="081********"
-                className="w-full bg-white text-slate-800 border border-slate-300 rounded-lg px-3 py-2 text-xs focus:border-[#0b57d0] focus:ring-1 focus:ring-[#0b57d0] focus:outline-none placeholder-slate-400 font-sans"
+                className="w-full bg-white dark:bg-zinc-800 text-slate-800 dark:text-zinc-100 border border-slate-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-xs focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none placeholder-slate-400 font-sans"
                 id="input-attendee-phone"
               />
             </div>
 
             <div className="relative">
-              <label className="block text-[10px] text-slate-500 font-sans uppercase tracking-wider mb-1 flex items-center justify-between font-bold">
+              <label className="block text-[10px] text-slate-500 dark:text-zinc-450 uppercase tracking-wider mb-1 flex items-center justify-between font-bold">
                 <span>Bubuhkan Tanda Tangan Basah</span>
-                <span className="text-[9px] text-amber-600 font-bold">*Wajib digores jelas</span>
+                <span className="text-[9px] text-amber-600 dark:text-amber-450 font-bold">*Wajib digores jelas</span>
               </label>
               
               <SignatureCanvas
@@ -151,10 +163,10 @@ export default function AttendancePanel({
 
             <button
               type="submit"
-              className="w-full bg-[#0b57d0] hover:bg-[#0049b8] text-white rounded-full py-2.5 text-xs font-bold font-display shadow-sm transition duration-150 focus:outline-none mt-2 cursor-pointer"
+              className="w-full bg-indigo-600 hover:bg-indigo-750 text-white rounded-lg py-2.5 text-xs font-semibold shadow-sm transition duration-150 focus:outline-none mt-2 cursor-pointer"
               id="btn-attendance-submit"
             >
-              <PenTool size={15} className="stroke-[2.5] inline-block mr-1.5" />
+              <PenTool size={14} className="stroke-[2.5] inline-block mr-1.5" />
               <span>Kirim Absensi Sekarang</span>
             </button>
           </form>
@@ -162,14 +174,14 @@ export default function AttendancePanel({
 
         {/* Right Side: verified attendees (Span 7) */}
         <div className="lg:col-span-7 lg:pl-8 space-y-4 flex flex-col" id="attendance-block-list-container">
-          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800 pb-1 flex items-center justify-between font-display">
+          <h4 className="text-xs font-semibold text-slate-800 dark:text-zinc-200 pb-1 flex items-center justify-between">
             <span>Daftar Hadir Terverifikasi</span>
-            <span className="text-[10px] text-[#0b57d0] bg-blue-50 px-2 py-0.5 rounded-full font-bold">TAMPIL: {activeAttendance.length} ORANG</span>
+            <span className="text-[10px] text-indigo-650 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40 px-2 py-0.5 rounded font-semibold border border-indigo-100/50 dark:border-indigo-900/30">TAMPIL: {activeAttendance.length} ORANG</span>
           </h4>
 
           <div className="space-y-3.5 max-h-[55vh] overflow-y-auto pr-1 flex-1" id="attendees-scroll-list">
             {activeAttendance.map((at) => (
-              <div key={at.id} className="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between gap-3 group hover:bg-slate-50 hover:border-slate-300 transition duration-150">
+              <div key={at.id} className="p-3 bg-white dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 flex items-center justify-between gap-3 group hover:bg-slate-50 dark:hover:bg-zinc-800/40 hover:border-slate-350 transition duration-150">
                 <div className="flex items-center gap-3.5 min-w-0">
                   <div className="w-12 h-12 bg-white rounded-lg border border-slate-200 flex items-center justify-center p-1 overflow-hidden shrink-0">
                     {at.signature.startsWith('data:image') ? (
@@ -182,11 +194,11 @@ export default function AttendancePanel({
                   </div>
 
                   <div className="min-w-0">
-                    <h5 className="text-xs font-bold text-slate-800 truncate" title={at.name}>
+                    <h5 className="text-xs font-semibold text-slate-800 dark:text-zinc-200 truncate" title={at.name}>
                       {at.name}
                     </h5>
-                    <p className="text-[10px] text-[#0b57d0] font-sans font-bold mt-0.5">{at.role}</p>
-                    <div className="flex items-center gap-2 text-[9px] text-slate-500 font-sans mt-1">
+                    <p className="text-[10px] text-indigo-650 dark:text-indigo-400 font-sans font-semibold mt-0.5">{at.role}</p>
+                    <div className="flex items-center gap-2 text-[9px] text-slate-450 dark:text-zinc-550 font-sans mt-1">
                       <span>NIK: {at.nik.substring(0, 6)}******</span>
                       <span>•</span>
                       <span>{new Date(at.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB</span>

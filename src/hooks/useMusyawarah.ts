@@ -81,6 +81,9 @@ export function useMusyawarah() {
   const [govAddress, setGovAddress] = useState('Jl. Raya Praja No. 1, Kode Pos 40182');
   const [govEmail, setGovEmail] = useState('pemdes@makmurjaya.desa.id');
   const [govWebsite, setGovWebsite] = useState('www.makmurjaya.desa.id');
+  const [footerCopyright, setFooterCopyright] = useState('E-Musyawarah Desa Makmur Jaya | Seksi Pemerintahan');
+  const [paguDict, setPaguDict] = useState<Record<string, number>>({});
+  const [budgetItems, setBudgetItems] = useState<{ id: string; sessionId: string; name: string; cost: number }[]>([]);
   const [showSettings, setShowSettings] = useState(false);
 
   // --- INITIAL LOAD & PERSISTENCE ---
@@ -103,6 +106,15 @@ export function useMusyawarah() {
     
     const savedWebsite = localStorage.getItem('gov_website');
     if (savedWebsite) setGovWebsite(savedWebsite);
+
+    const savedFooter = localStorage.getItem('gov_footer_copyright');
+    if (savedFooter) setFooterCopyright(savedFooter);
+
+    const savedPagu = localStorage.getItem('musyawarah_pagu_dict');
+    if (savedPagu) setPaguDict(JSON.parse(savedPagu));
+
+    const savedBudgetItems = localStorage.getItem('musyawarah_budget_items');
+    if (savedBudgetItems) setBudgetItems(JSON.parse(savedBudgetItems));
 
     // Load Sessions
     const savedSessions = localStorage.getItem('musyawarah_sessions');
@@ -736,6 +748,84 @@ export function useMusyawarah() {
     triggerNotification('Butir keputusan dihapus', 'info');
   };
 
+  const handleExportAttendanceCSV = () => {
+    if (activeAttendance.length === 0) {
+      triggerNotification('Daftar absensi masih kosong', 'error');
+      return;
+    }
+    
+    const headers = ['No', 'Nama Lengkap', 'NIK', 'Jabatan/Utusan', 'No WA/HP', 'Waktu Presensi'];
+    const rows = activeAttendance.map((at, idx) => [
+      idx + 1,
+      `"${at.name.replace(/"/g, '""')}"`,
+      `'${at.nik}`,
+      `"${at.role.replace(/"/g, '""')}"`,
+      `"${at.phone.replace(/"/g, '""')}"`,
+      `"${new Date(at.timestamp).toLocaleString('id-ID')}"`
+    ]);
+    
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(e => e.join(','))
+    ].join('\n');
+    
+    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.href = url;
+    downloadAnchor.download = `Daftar-Hadir-Rapat-${villageName.replace(/\s+/g, '-')}-${activeSession?.title.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    document.body.removeChild(downloadAnchor);
+    URL.revokeObjectURL(url);
+    triggerNotification('Daftar absensi berhasil diekspor ke CSV!', 'success');
+  };
+
+  const handleUpdatePagu = (amount: number) => {
+    if (amount < 0) {
+      triggerNotification('Pagu anggaran tidak boleh negatif', 'error');
+      return;
+    }
+    const updated = { ...paguDict, [selectedSessionId]: amount };
+    setPaguDict(updated);
+    localStorage.setItem('musyawarah_pagu_dict', JSON.stringify(updated));
+    triggerNotification('Pagu anggaran desa berhasil diperbarui!', 'success');
+  };
+
+  const handleAddBudgetItem = (name: string, cost: number) => {
+    if (!name.trim() || name.trim().length < 3) {
+      triggerNotification('Nama program/belanja terlalu singkat (minimal 3 karakter)', 'error');
+      return;
+    }
+    if (cost <= 0) {
+      triggerNotification('Estimasi biaya program harus lebih besar dari 0', 'error');
+      return;
+    }
+    if (!validateSafeText(name)) {
+      triggerNotification('Input mengandung simbol khusus yang dilarang demi keamanan', 'error');
+      return;
+    }
+    
+    const newItem = {
+      id: `budget-${Date.now()}`,
+      sessionId: selectedSessionId,
+      name: name.trim(),
+      cost: cost
+    };
+    
+    const updated = [...budgetItems, newItem];
+    setBudgetItems(updated);
+    localStorage.setItem('musyawarah_budget_items', JSON.stringify(updated));
+    triggerNotification('Item alokasi belanja ditambahkan!', 'success');
+  };
+
+  const handleDeleteBudgetItem = (id: string) => {
+    const updated = budgetItems.filter(item => item.id !== id);
+    setBudgetItems(updated);
+    localStorage.setItem('musyawarah_budget_items', JSON.stringify(updated));
+    triggerNotification('Item alokasi belanja dihapus', 'info');
+  };
+
   const handleSaveSettings = (data: {
     village: string;
     subdistrict: string;
@@ -743,6 +833,7 @@ export function useMusyawarah() {
     address: string;
     email: string;
     website: string;
+    footerCopyright: string;
   }) => {
     setVillageName(data.village);
     setSubdistrictName(data.subdistrict);
@@ -750,6 +841,7 @@ export function useMusyawarah() {
     setGovAddress(data.address);
     setGovEmail(data.email);
     setGovWebsite(data.website);
+    setFooterCopyright(data.footerCopyright);
 
     localStorage.setItem('gov_village_name', data.village);
     localStorage.setItem('gov_subdistrict_name', data.subdistrict);
@@ -757,6 +849,7 @@ export function useMusyawarah() {
     localStorage.setItem('gov_address', data.address);
     localStorage.setItem('gov_email', data.email);
     localStorage.setItem('gov_website', data.website);
+    localStorage.setItem('gov_footer_copyright', data.footerCopyright);
 
     triggerNotification('Pengaturan daerah berhasil diperbarui!', 'success');
     setShowSettings(false);
@@ -777,6 +870,9 @@ export function useMusyawarah() {
         govAddress: localStorage.getItem('gov_address'),
         govEmail: localStorage.getItem('gov_email'),
         govWebsite: localStorage.getItem('gov_website'),
+        footerCopyright: localStorage.getItem('gov_footer_copyright'),
+        paguDict: localStorage.getItem('musyawarah_pagu_dict'),
+        budgetItems: localStorage.getItem('musyawarah_budget_items'),
       };
       
       const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(data, null, 2))}`;
@@ -818,6 +914,9 @@ export function useMusyawarah() {
         if (parsed.govAddress) localStorage.setItem('gov_address', parsed.govAddress);
         if (parsed.govEmail) localStorage.setItem('gov_email', parsed.govEmail);
         if (parsed.govWebsite) localStorage.setItem('gov_website', parsed.govWebsite);
+        if (parsed.footerCopyright) localStorage.setItem('gov_footer_copyright', parsed.footerCopyright);
+        if (parsed.paguDict) localStorage.setItem('musyawarah_pagu_dict', parsed.paguDict);
+        if (parsed.budgetItems) localStorage.setItem('musyawarah_budget_items', parsed.budgetItems);
 
         triggerNotification('Database berhasil diimpor! Memuat ulang...', 'success');
         setTimeout(() => {
@@ -833,6 +932,14 @@ export function useMusyawarah() {
   return {
     handleExportBackup,
     handleImportBackup,
+    footerCopyright,
+    setFooterCopyright,
+    paguDict,
+    budgetItems,
+    handleExportAttendanceCSV,
+    handleUpdatePagu,
+    handleAddBudgetItem,
+    handleDeleteBudgetItem,
     villageName,
     setVillageName,
     subdistrictName,

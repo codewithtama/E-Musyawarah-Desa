@@ -34,6 +34,13 @@ export default function App() {
   const {
     handleExportBackup,
     handleImportBackup,
+    footerCopyright,
+    paguDict,
+    budgetItems,
+    handleExportAttendanceCSV,
+    handleUpdatePagu,
+    handleAddBudgetItem,
+    handleDeleteBudgetItem,
     villageName,
     subdistrictName,
     regencyName,
@@ -131,11 +138,7 @@ export default function App() {
   } = useMusyawarah();
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] text-slate-800 flex flex-col font-sans selection:bg-blue-600/25 selection:text-[#0b57d0] antialiased" id="main-applet-root">
-      
-      {/* Background Decor */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f080_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f080_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
-      <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+    <div className="min-h-screen bg-[#f8fafc] dark:bg-[#0f172a] text-slate-800 dark:text-zinc-200 flex flex-col font-sans selection:bg-indigo-650/20 selection:text-indigo-600 antialiased" id="main-applet-root">
       
       {/* --- NOTIFICATION FLOATER --- */}
       <AnimatePresence>
@@ -144,17 +147,17 @@ export default function App() {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className={`fixed bottom-6 left-6 z-50 rounded-full px-5 py-3 shadow-google-2 flex items-center gap-3 max-w-sm w-full border ${
+            className={`fixed bottom-6 left-6 z-50 rounded-lg px-5 py-3 shadow-md flex items-center gap-3 max-w-sm w-full border ${
               notification.type === 'success'
-                ? 'bg-slate-900 text-white border-transparent'
+                ? 'bg-slate-900 dark:bg-zinc-800 text-white border-transparent'
                 : notification.type === 'error'
-                ? 'bg-[#ea4335] text-white border-transparent'
-                : 'bg-[#0b57d0] text-white border-transparent'
+                ? 'bg-red-650 text-white border-transparent'
+                : 'bg-indigo-600 text-white border-transparent'
             }`}
             id="notification-floater"
           >
-            <div className={`w-2 h-2 rounded-full shrink-0 ${notification.type === 'success' ? 'bg-emerald-400' : 'bg-white'}`} />
-            <span className="text-xs font-bold tracking-wide font-sans">{notification.message}</span>
+            <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${notification.type === 'success' ? 'bg-emerald-400' : 'bg-white'}`} />
+            <span className="text-xs font-semibold tracking-wide font-sans">{notification.message}</span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -190,26 +193,26 @@ export default function App() {
         {/* RIGHT COLUMN: DETAILED SESSION ACTIVE WORKSPACE */}
         <section className="lg:col-span-8 flex flex-col" id="section-session-detail-workspace">
           {activeSession ? (
-            <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden flex-1 flex flex-col shadow-[0_1px_2px_rgba(60,64,67,0.03)]">
+            <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl overflow-hidden flex-1 flex flex-col shadow-xs">
               
               {/* Active Workshop Banner */}
-              <div className="bg-slate-50 border-b border-slate-200 p-5">
+              <div className="bg-slate-50/70 dark:bg-zinc-900/40 border-b border-slate-200/60 dark:border-zinc-800 p-5">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
                     <div className="flex items-center gap-2 mb-1.5 font-sans">
-                      <span className={`text-[9px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider leading-none border flex items-center gap-1 ${
+                      <span className={`text-[9px] font-semibold px-2 py-0.5 rounded uppercase tracking-wider leading-none flex items-center gap-1 ${
                         activeSession.status === 'active'
-                          ? 'bg-green-50 text-green-800 border-green-200'
-                          : 'bg-slate-150 text-slate-600 border-slate-250'
+                          ? 'bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border border-emerald-100/50'
+                          : 'bg-slate-100 dark:bg-zinc-800 text-slate-650 dark:text-zinc-400'
                       }`}>
-                        {activeSession.status === 'active' && <span className="w-1 h-1 bg-green-600 rounded-full shrink-0" />}
-                        {t('session')} {activeSession.status === 'active' ? t('active') : t('completed')}
+                        {activeSession.status === 'active' && <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full shrink-0" />}
+                        {t('session')} {activeSession.status === 'active' ? 'Aktif' : 'Selesai'}
                       </span>
-                      <span className="text-[10px] text-slate-500 font-bold tracking-wide bg-slate-100 px-2 py-0.5 rounded-full">
+                      <span className="text-[9.5px] text-indigo-650 dark:text-indigo-400 font-semibold tracking-wide bg-indigo-50/40 dark:bg-indigo-950/20 border border-indigo-100/40 dark:border-indigo-900/30 px-2 py-0.5 rounded">
                         {activeSession.category}
                       </span>
                     </div>
-                    <h2 className="text-base font-bold text-slate-800 font-display uppercase tracking-tight">
+                    <h2 className="text-sm font-semibold text-slate-900 dark:text-zinc-100 tracking-tight font-sans">
                       {activeSession.title}
                     </h2>
                   </div>
@@ -218,50 +221,50 @@ export default function App() {
                     {activeSession.status === 'active' ? (
                       <button
                         onClick={() => handleCompleteSession(activeSession.id)}
-                        className="bg-[#ea4335] hover:bg-[#c5221f] text-white px-4 py-2 rounded-full text-xs font-bold font-display shadow-xs transition duration-150 cursor-pointer focus:outline-none"
+                        className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-xs font-semibold tracking-tight shadow-sm transition duration-150 cursor-pointer focus:outline-none"
                         id="btn-workspace-finish-session"
                       >
-                        {t('close_meeting')}
+                        Tutup Sidang
                       </button>
                     ) : (
                       <button
                         onClick={() => handleReopenSession(activeSession.id)}
-                        className="bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 px-4 py-2 rounded-full text-xs font-bold font-display shadow-xs transition duration-150 cursor-pointer focus:outline-none"
+                        className="bg-white hover:bg-slate-50 dark:bg-zinc-800 dark:hover:bg-zinc-750 border border-slate-200 dark:border-zinc-700 text-slate-700 dark:text-zinc-200 px-4 py-2 rounded-lg text-xs font-semibold tracking-tight shadow-sm transition duration-150 cursor-pointer focus:outline-none"
                         id="btn-workspace-reopen-session"
                       >
-                        {t('activate_session')}
+                        Aktifkan Sidang
                       </button>
                     )}
                     
                     <button
                       onClick={() => setShowReport(true)}
-                      className="bg-white hover:bg-slate-50 border border-slate-300 hover:border-[#0b57d0] text-[#0b57d0] px-4 py-2 rounded-full text-xs font-bold font-display shadow-xs transition duration-150 cursor-pointer focus:outline-none"
+                      className="bg-white hover:bg-indigo-50/20 dark:bg-zinc-800 dark:hover:bg-zinc-750 border border-slate-200 dark:border-zinc-700 hover:border-indigo-300 dark:hover:border-indigo-900 text-indigo-650 dark:text-indigo-400 px-4 py-2 rounded-lg text-xs font-semibold tracking-tight shadow-sm transition duration-150 cursor-pointer focus:outline-none"
                       id="btn-workspace-quick-report"
                     >
-                      {t('document_result')}
+                      Unduh Berita Acara
                     </button>
                   </div>
                 </div>
 
                 {/* Sub Metadata Info strip */}
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-[10px] text-slate-500 mt-4.5 pt-3.5 border-t border-slate-100 font-sans font-bold">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-[10px] text-slate-500 mt-4.5 pt-3.5 border-t border-slate-100 dark:border-zinc-850 font-sans font-medium">
                   <div className="flex items-center gap-2">
-                    <Calendar size={13} className="text-slate-400" />
-                    <span>{t('date')}: {activeSession.date}</span>
+                    <Calendar size={13} className="text-slate-400 dark:text-zinc-550" />
+                    <span>Tanggal: {activeSession.date}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Clock size={13} className="text-slate-400" />
-                    <span>{t('time')}: {activeSession.time}</span>
+                    <Clock size={13} className="text-slate-400 dark:text-zinc-550" />
+                    <span>Waktu: {activeSession.time}</span>
                   </div>
                   <div className="flex items-center gap-2 col-span-2 md:col-span-1">
-                    <MapPin size={13} className="text-slate-400 translate-y-[0.5px]" />
-                    <span className="truncate">{t('location')}: {activeSession.location}</span>
+                    <MapPin size={13} className="text-slate-400 dark:text-zinc-550 translate-y-[0.5px]" />
+                    <span className="truncate">Lokasi: {activeSession.location}</span>
                   </div>
                 </div>
               </div>
 
               {/* Workspace Navigation Tabs */}
-              <div className="border-b border-slate-250 bg-slate-50/50 flex px-1.5 overflow-x-auto gap-1" id="workspace-tabs-bar">
+              <div className="border-b border-slate-200 dark:border-zinc-800 bg-slate-50/30 dark:bg-zinc-900/10 flex px-2 overflow-x-auto gap-1" id="workspace-tabs-bar">
                 {[
                   { id: 'agenda', label: 'AGENDA', count: activeAgendas.length, icon: CheckSquare },
                   { id: 'attendance', label: 'DAFTAR HADIR', count: activeAttendance.length, icon: UserCheck },
@@ -274,16 +277,16 @@ export default function App() {
                     <button
                       key={tb.id}
                       onClick={() => setActiveTab(tb.id as any)}
-                      className={`py-3.5 px-4 text-xs font-bold font-display border-b-2 flex items-center gap-2 whitespace-nowrap transition duration-150 cursor-pointer ${
+                      className={`py-3.5 px-4 text-xs font-semibold border-b-2 flex items-center gap-2 whitespace-nowrap transition duration-150 cursor-pointer ${
                         isCur
-                          ? 'border-[#0b57d0] text-[#0b57d0] bg-blue-50/15'
-                          : 'border-transparent text-slate-550 hover:text-slate-700 hover:bg-slate-50'
+                          ? 'border-indigo-600 text-indigo-655 dark:text-indigo-400 bg-indigo-50/20 dark:bg-indigo-950/10'
+                          : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-slate-50/40 dark:hover:bg-zinc-800/10'
                       }`}
                       id={`tab-button-${tb.id}`}
                     >
-                      <Icon size={14} className={isCur ? 'text-[#0b57d0]' : 'text-slate-400'} />
+                      <Icon size={14} className={isCur ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-450 dark:text-zinc-500'} />
                       <span>{tb.label}</span>
-                      <span className={`text-[9px] font-sans px-2.5 py-0.5 rounded-full font-bold border ${isCur ? 'bg-blue-50 text-[#0b57d0] border-blue-200' : 'bg-slate-100 text-slate-500 border-slate-200'}`}>
+                      <span className={`text-[9px] font-sans px-2 py-0.5 rounded font-bold border ${isCur ? 'bg-indigo-50/80 dark:bg-indigo-950/30 text-indigo-650 dark:text-indigo-400 border-indigo-200/50 dark:border-indigo-900/30' : 'bg-slate-100 dark:bg-zinc-800 text-slate-550 dark:text-zinc-400 border-slate-200/60 dark:border-zinc-800'}`}>
                         {tb.count}
                       </span>
                     </button>
@@ -292,7 +295,7 @@ export default function App() {
               </div>
 
               {/* Workspace Active Panels */}
-              <div className="p-6 flex-1 bg-white" id="workspace-viewports">
+              <div className="p-6 flex-1 bg-white dark:bg-zinc-900" id="workspace-viewports">
                 {activeTab === 'agenda' && (
                   <AgendaPanel
                     activeAgendas={activeAgendas}
@@ -324,6 +327,7 @@ export default function App() {
                     handleAddAttendance={handleAddAttendance}
                     handleDeleteAttendance={handleDeleteAttendance}
                     sigKey={sigKey}
+                    handleExportAttendanceCSV={handleExportAttendanceCSV}
                   />
                 )}
 
@@ -366,6 +370,12 @@ export default function App() {
                     setNewDecisionVotesAbstain={setNewDecisionVotesAbstain}
                     handleAddDecision={handleAddDecision}
                     handleDeleteDecision={handleDeleteDecision}
+                    selectedSessionId={selectedSessionId}
+                    paguDict={paguDict}
+                    budgetItems={budgetItems}
+                    handleUpdatePagu={handleUpdatePagu}
+                    handleAddBudgetItem={handleAddBudgetItem}
+                    handleDeleteBudgetItem={handleDeleteBudgetItem}
                   />
                 )}
               </div>
@@ -403,7 +413,7 @@ export default function App() {
 
       {/* --- FOOTER BANNER --- */}
       <footer className="bg-white py-6 text-center text-[10px] text-slate-400 border-t border-slate-200 mt-12 print:hidden" id="app-general-footer">
-        <p className="uppercase tracking-wider font-bold font-display">&copy; 2026 {regencyName} | E-Musyawarah {villageName} Seksi Pemerintahan.</p>
+        <p className="uppercase tracking-wider font-bold font-display">&copy; 2026 {footerCopyright}.</p>
         <p className="mt-1.5 font-sans text-slate-450 font-bold">{t('footer_philosophy')}</p>
       </footer>
 
@@ -437,6 +447,7 @@ export default function App() {
         govAddress={govAddress}
         govEmail={govEmail}
         govWebsite={govWebsite}
+        footerCopyright={footerCopyright}
         handleSaveSettings={handleSaveSettings}
         handleExportBackup={handleExportBackup}
         handleImportBackup={handleImportBackup}

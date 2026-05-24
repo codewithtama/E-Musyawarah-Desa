@@ -11,6 +11,7 @@ interface SettingsModalProps {
   govAddress: string;
   govEmail: string;
   govWebsite: string;
+  footerCopyright: string;
   handleSaveSettings: (data: {
     village: string;
     subdistrict: string;
@@ -18,6 +19,7 @@ interface SettingsModalProps {
     address: string;
     email: string;
     website: string;
+    footerCopyright: string;
   }) => void;
   handleExportBackup: () => void;
   handleImportBackup: (file: File) => void;
@@ -32,6 +34,7 @@ export default function SettingsModal({
   govAddress,
   govEmail,
   govWebsite,
+  footerCopyright,
   handleSaveSettings,
   handleExportBackup,
   handleImportBackup
@@ -43,6 +46,7 @@ export default function SettingsModal({
   const [address, setAddress] = useState(govAddress);
   const [email, setEmail] = useState(govEmail);
   const [website, setWebsite] = useState(govWebsite);
+  const [footerCopyText, setFooterCopyText] = useState(footerCopyright);
 
   // Sync state with props when modal opens
   useEffect(() => {
@@ -53,8 +57,9 @@ export default function SettingsModal({
       setAddress(govAddress);
       setEmail(govEmail);
       setWebsite(govWebsite);
+      setFooterCopyText(footerCopyright);
     }
-  }, [showSettings, villageName, subdistrictName, regencyName, govAddress, govEmail, govWebsite]);
+  }, [showSettings, villageName, subdistrictName, regencyName, govAddress, govEmail, govWebsite, footerCopyright]);
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,7 +69,8 @@ export default function SettingsModal({
       regency,
       address,
       email,
-      website
+      website,
+      footerCopyright: footerCopyText
     });
   };
 
@@ -184,6 +190,20 @@ export default function SettingsModal({
                     id="input-set-website"
                   />
                 </div>
+              </div>
+
+              {/* Footer copyright text field */}
+              <div>
+                <label className="block text-[10px] text-slate-500 font-sans uppercase tracking-wider mb-1.5 font-bold">Teks Lisensi Hak Cipta Footer</label>
+                <input
+                  type="text"
+                  value={footerCopyText}
+                  onChange={(e) => setFooterCopyText(e.target.value)}
+                  placeholder="Contoh: E-Musyawarah Desa Makmur Jaya | Seksi Pemerintahan"
+                  className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-[#0b57d0] focus:ring-1 focus:ring-[#0b57d0] placeholder-slate-400 font-sans"
+                  required
+                  id="input-set-footercopy"
+                />
               </div>
 
               {/* Divider for Backup & Restore */}

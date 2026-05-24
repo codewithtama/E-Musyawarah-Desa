@@ -2,6 +2,8 @@
 
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: "Roboto", "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Outfit", sans-serif;
@@ -143,18 +145,50 @@ h1, h2, h3, h4, h5, h6 {
 /* Navigation, buttons & badge adaptations */
 .dark .text-\[\#0b57d0\],
 .dark .text-blue-900,
-.dark .text-blue-800 {
+.dark .text-blue-850,
+.dark .text-blue-800,
+.dark .text-indigo-900,
+.dark .text-indigo-950,
+.dark .text-indigo-650,
+.dark .text-indigo-655,
+.dark .text-indigo-750 {
   color: #a8c7fa !important;
 }
 .dark .bg-blue-50,
 .dark .bg-blue-50\/15,
-.dark .bg-blue-50\/70 {
+.dark .bg-blue-50\/70,
+.dark .bg-indigo-50,
+.dark .bg-indigo-50\/15,
+.dark .bg-indigo-50\/20,
+.dark .bg-indigo-50\/40,
+.dark .bg-indigo-50\/60,
+.dark .bg-indigo-50\/70,
+.dark .bg-indigo-50\/80 {
   background-color: rgba(168, 199, 250, 0.12) !important;
   color: #a8c7fa !important;
 }
 .dark .border-blue-200,
-.dark .border-blue-100 {
+.dark .border-blue-100,
+.dark .border-indigo-200,
+.dark .border-indigo-100,
+.dark .border-indigo-150 {
   border-color: rgba(168, 199, 250, 0.25) !important;
+}
+
+/* Emerald status badge adaptations */
+.dark .bg-emerald-50 {
+  background-color: rgba(52, 211, 153, 0.12) !important;
+  color: #34d399 !important;
+  border-color: rgba(52, 211, 153, 0.25) !important;
+}
+.dark .text-emerald-700 {
+  color: #34d399 !important;
+}
+
+/* Background list & border adaptations */
+.dark .bg-slate-100 {
+  background-color: #2e2e2e !important;
+  color: #c4c7c5 !important;
 }
 
 /* Modals overlays adaptation */
