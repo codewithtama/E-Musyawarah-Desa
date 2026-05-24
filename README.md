@@ -1,5 +1,7 @@
 # E-Musyawarah Desa
 
+🚀 **Demo Aplikasi Langsung:** [e-musyawarah-desa.vercel.app](https://e-musyawarah-desa.vercel.app/)
+
 E-Musyawarah Desa adalah aplikasi administrasi digital untuk memfasilitasi pencatatan, pengelolaan, dan pengesahan hasil rapat musyawarah di tingkat desa atau kelurahan. Aplikasi ini dirancang untuk mendigitalisasi proses absensi warga (dilengkapi tanda tangan elektronik), penyusunan notulen rapat, serta penerbitan Berita Acara resmi secara praktis dan dinamis.
 
 ---
