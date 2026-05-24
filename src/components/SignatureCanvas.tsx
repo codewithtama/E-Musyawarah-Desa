@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { PenTool, Trash2, Check } from 'lucide-react';
 
 interface SignatureCanvasProps {
+  key?: any;
   onSave: (base64Data: string) => void;
   onClear?: () => void;
   placeholder?: string;
@@ -119,7 +120,7 @@ export default function SignatureCanvas({ onSave, onClear, placeholder = 'Goresk
         
         {isEmpty && (
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-slate-400 select-none px-4 text-center">
-            <PenTool size={20} className="mb-1 animate-pulse" />
+            <PenTool size={20} className="mb-1 text-slate-400" />
             <span className="text-xs font-mono">{placeholder}</span>
           </div>
         )}
