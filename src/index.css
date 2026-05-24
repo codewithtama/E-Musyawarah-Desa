@@ -37,3 +37,143 @@ h1, h2, h3, h4, h5, h6 {
 ::-webkit-scrollbar-thumb:hover {
   background: #bdc1c6;
 }
+
+/* ==========================================
+   PREMIUM DARK MODE DESIGN SYSTEM OVERRIDES
+   ========================================== */
+.dark {
+  background-color: #121212 !important;
+  color: #f1f3f4 !important;
+}
+
+.dark body {
+  background-color: #121212 !important;
+  color: #f1f3f4 !important;
+}
+
+.dark #main-applet-root {
+  background-color: #121212 !important;
+  color: #f1f3f4 !important;
+}
+
+/* Force signature pad light background to retain standard realistic dark pen strokes */
+.dark #sig-pad-canvas-wrapper,
+.dark #sig-pad-canvas-wrapper * {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+.dark #sig-pad-canvas-wrapper span.text-amber-600 {
+  color: #b45309 !important;
+}
+
+/* Background overrides */
+.dark header#main-app-header,
+.dark .bg-white,
+.dark [class*="bg-white"] {
+  background-color: #1e1e1e !important;
+  color: #f1f3f4 !important;
+}
+
+.dark [class*="border-slate-"],
+.dark .border-slate-200,
+.dark .border-slate-100,
+.dark .border-slate-250,
+.dark .border-slate-300,
+.dark hr {
+  border-color: #2f2f2f !important;
+}
+
+.dark .bg-slate-50,
+.dark .bg-slate-50\/50,
+.dark [class*="bg-slate-50"] {
+  background-color: #2a2a2a !important;
+  color: #e3e3e3 !important;
+}
+
+/* Table overrides */
+.dark table,
+.dark thead,
+.dark tbody,
+.dark tr,
+.dark th,
+.dark td {
+  border-color: #2f2f2f !important;
+  color: #e3e3e3 !important;
+}
+.dark th {
+  background-color: #2a2a2a !important;
+}
+
+/* Input, select, textarea overrides */
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: #2d2d2d !important;
+  border-color: #3d3d3d !important;
+  color: #ffffff !important;
+}
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #8e918f !important;
+}
+
+/* Text color adaptations */
+.dark .text-slate-800,
+.dark .text-slate-900,
+.dark .text-slate-850,
+.dark [class*="text-slate-8"] {
+  color: #f1f3f4 !important;
+}
+.dark .text-slate-500,
+.dark .text-slate-600,
+.dark .text-slate-700,
+.dark .text-slate-650,
+.dark .text-slate-550,
+.dark [class*="text-slate-5"],
+.dark [class*="text-slate-6"],
+.dark [class*="text-slate-7"] {
+  color: #c4c7c5 !important;
+}
+.dark .text-slate-400,
+.dark .text-slate-450 {
+  color: #8e918f !important;
+}
+
+/* Navigation, buttons & badge adaptations */
+.dark .text-\[\#0b57d0\],
+.dark .text-blue-900,
+.dark .text-blue-800 {
+  color: #a8c7fa !important;
+}
+.dark .bg-blue-50,
+.dark .bg-blue-50\/15,
+.dark .bg-blue-50\/70 {
+  background-color: rgba(168, 199, 250, 0.12) !important;
+  color: #a8c7fa !important;
+}
+.dark .border-blue-200,
+.dark .border-blue-100 {
+  border-color: rgba(168, 199, 250, 0.25) !important;
+}
+
+/* Modals overlays adaptation */
+.dark [id*="-overlay"] {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  backdrop-filter: blur(2px);
+}
+
+.dark [id*="-card"],
+.dark .relative.max-w-lg,
+.dark .bg-white.p-7 {
+  background-color: #1e1e1e !important;
+  border-color: #2f2f2f !important;
+}
+
+/* Scrollbar thumb dark mode override */
+.dark ::-webkit-scrollbar-thumb {
+  background: #3e4240;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #505452;
+}

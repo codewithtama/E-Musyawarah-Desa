@@ -1,5 +1,5 @@
 import React from 'react';
-import { Landmark, Plus, FileText, Settings } from 'lucide-react';
+import { Landmark, Plus, FileText, Settings, Sun, Moon } from 'lucide-react';
 import { MusyawarahSession } from '../types';
 
 interface HeaderProps {
@@ -9,6 +9,8 @@ interface HeaderProps {
   triggerNotification: (msg: string, type?: 'success' | 'info' | 'error') => void;
   villageName: string;
   setShowSettings: (show: boolean) => void;
+  darkMode: boolean;
+  setDarkMode: (dark: boolean) => void;
 }
 
 export default function Header({
@@ -17,7 +19,9 @@ export default function Header({
   setShowReport,
   triggerNotification,
   villageName,
-  setShowSettings
+  setShowSettings,
+  darkMode,
+  setDarkMode
 }: HeaderProps) {
   return (
     <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-[0_1px_3px_rgba(60,64,67,0.08)]" id="main-app-header">
@@ -38,6 +42,16 @@ export default function Header({
         </div>
 
         <div className="flex items-center gap-2.5">
+          <button
+            type="button"
+            onClick={() => setDarkMode(!darkMode)}
+            className="p-2 text-slate-500 hover:text-[#0b57d0] hover:bg-slate-100 border border-slate-300 hover:border-[#0b57d0] transition duration-150 rounded-full focus:outline-none cursor-pointer"
+            title={darkMode ? "Aktifkan Mode Terang" : "Aktifkan Mode Gelap"}
+            id="btn-header-dark-toggle"
+          >
+            {darkMode ? <Sun size={17} className="text-amber-500 animate-none" /> : <Moon size={17} />}
+          </button>
+
           <button
             onClick={() => setShowSettings(true)}
             className="p-2 text-slate-500 hover:text-[#0b57d0] hover:bg-slate-100 border border-slate-300 hover:border-[#0b57d0] transition duration-150 rounded-full focus:outline-none cursor-pointer"

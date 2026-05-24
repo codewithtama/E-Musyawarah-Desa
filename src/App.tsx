@@ -17,6 +17,20 @@ import SettingsModal from './components/SettingsModal';
 
 export default function App() {
   const { t } = useTranslation();
+  const [darkMode, setDarkMode] = React.useState(() => {
+    return localStorage.getItem('theme') === 'dark';
+  });
+
+  React.useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [darkMode]);
+
   const {
     handleExportBackup,
     handleImportBackup,
@@ -153,6 +167,8 @@ export default function App() {
         triggerNotification={triggerNotification}
         villageName={villageName}
         setShowSettings={setShowSettings}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
       />
 
       {/* --- CORE WORKSPACE LAYOUT --- */}

@@ -116,7 +116,7 @@ export default function SignatureCanvas({ onSave, onClear, placeholder = 'Goresk
 
   return (
     <div ref={containerRef} className="w-full">
-      <div className="relative border-2 border-dashed border-slate-300 rounded-lg overflow-hidden bg-slate-50 hover:bg-slate-50/50 transition duration-150">
+      <div id="sig-pad-canvas-wrapper" className="relative border-2 border-dashed border-slate-300 rounded-lg overflow-hidden bg-slate-50 hover:bg-slate-50/50 transition duration-150">
         
         {isEmpty && (
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-slate-400 select-none px-4 text-center">
